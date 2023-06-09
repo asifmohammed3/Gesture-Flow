@@ -1,7 +1,12 @@
+import os
 import tkinter
 import tkinter.messagebox
 import customtkinter
 import webbrowser
+import subprocess
+
+
+command = ['python', 'modes.py']
 
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -38,7 +43,7 @@ class App(customtkinter.CTk):
         
 
         frame = customtkinter.CTkFrame(self, width=300, corner_radius=0)
-        frame.grid(row=0, column=1, padx=20, pady=(0, 20))
+        frame.grid(row=0, column=1, padx=(0,50), pady=(0, 20))
         mode_label = customtkinter.CTkLabel(frame, text="Select a mode:",font=customtkinter.CTkFont(size=20, weight="bold"))
         mode_label.grid(row=1, column=1, padx=20, pady=(30, 20))
     
@@ -69,18 +74,30 @@ class App(customtkinter.CTk):
         switch3 = customtkinter.CTkSwitch(frame, text="PDF Control",button_color="green", command=switch_event3,
                                  onvalue="on", offvalue="off")
         switch3.grid(row=4, column=1, padx=20, pady=(0, 30))
+        
 
         def run_event():
-            print("Run")
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output, error = process.communicate()
+
+            # Print the output and error (if any)
+            print("Output:", output.decode())
+            print("Error:", error.decode())
+            
+        
+
 
 
         run_button = customtkinter.CTkButton(frame, text="Run", command=run_event,font=customtkinter.CTkFont(size=15), width=100, height=40)
-        run_button.grid(row=5, column=1, padx=20 , pady=(0, 50))
+        run_button.grid(row=5, column=1, padx=20 , pady=(0, 30))
+        
+        stop_button = customtkinter.CTkButton(frame, text="Stop", command=None,font=customtkinter.CTkFont(size=15), width=100, height=40,fg_color="red",hover_color="grey")
+        stop_button.grid(row=6, column=1, padx=20 , pady=(0, 30))
 
         def button_event():
             webbrowser.open("https://shamans1.github.io/mini-project/")
 
-        web_label = customtkinter.CTkLabel(self, text="Documentation of GestureFow",font=customtkinter.CTkFont(size=22, weight="bold"))
+        web_label = customtkinter.CTkLabel(self, text="Documentation of GestureFlow",font=customtkinter.CTkFont(size=22, weight="bold"))
         web_label.grid(row=2, column=1, padx=20)
         web_button = customtkinter.CTkButton(self, text="Click Here", command=button_event,font=customtkinter.CTkFont(size=15), width=100, height=40)
         web_button.grid(row=3, column=1, padx=20 , pady=(0, 50))
