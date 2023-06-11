@@ -4,9 +4,14 @@ import tkinter.messagebox
 import customtkinter
 import webbrowser
 import subprocess
+import media
+import pdf
+import volumeBrightness
+from const import flag
 
 
-command = ['python', 'modes.py']
+# command = ['python', 'media.py']
+# running_process = None
 
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -48,18 +53,26 @@ class App(customtkinter.CTk):
         mode_label.grid(row=1, column=1, padx=20, pady=(30, 20))
     
         def switch_event1():
+            
             if(switch1.get() == "on"):
                 print("Volume/Brightness Control")
+                volumeBrightness.volBright()
                 switch2.deselect()
                 switch3.deselect()
-        def switch_event2():
+                
+        def switch_event2(flag):
             if(switch2.get() == "on"):
                 print("Media Control")
+                flag=True
+              
+                media.mediaControl()
                 switch1.deselect()
                 switch3.deselect()
+                
         def switch_event3():
             if(switch3.get() == "on"):
                 print("PDF Control")
+                pdf.pdfControl()
                 switch1.deselect() 
                 switch2.deselect()
                 
@@ -68,7 +81,7 @@ class App(customtkinter.CTk):
         switch1 = customtkinter.CTkSwitch(frame, text="Volume/Brightness Control",button_color="green", command=switch_event1,
                                  onvalue="on", offvalue="off")
         switch1.grid(row=2, column=1, padx=20, pady=(0, 20))
-        switch2 = customtkinter.CTkSwitch(frame, text="Media Control",button_color="green", command=switch_event2,
+        switch2 = customtkinter.CTkSwitch(frame, text="Media Control",button_color="green", command=lambda: switch_event2(flag),
                                  onvalue="on", offvalue="off")
         switch2.grid(row=3, column=1, padx=20, pady=(0, 20))
         switch3 = customtkinter.CTkSwitch(frame, text="PDF Control",button_color="green", command=switch_event3,
@@ -76,23 +89,30 @@ class App(customtkinter.CTk):
         switch3.grid(row=4, column=1, padx=20, pady=(0, 30))
         
 
-        def run_event():
-            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            output, error = process.communicate()
+        # def run_event():
+        #     global running_process
+        #     running_process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        #     output, error = running_process.communicate()
 
-            # Print the output and error (if any)
-            print("Output:", output.decode())
-            print("Error:", error.decode())
+        #     # Print the output and error (if any)
+        #     print("Output:", output.decode())
+        #     print("Error:", error.decode())
             
+        # def stop_event():
+        #     global running_process
+        #     output, error = running_process.terminate()
+
+        #     # Print the output and error (if any)
+        #     print("Output:", output.decode())
+        #     print("Error:", error.decode())
+
+
+
+        # run_button = customtkinter.CTkButton(frame, text="Run", command=run_event,font=customtkinter.CTkFont(size=15), width=100, height=40)
+        # run_button.grid(row=5, column=1, padx=20 , pady=(0, 30))
         
-
-
-
-        run_button = customtkinter.CTkButton(frame, text="Run", command=run_event,font=customtkinter.CTkFont(size=15), width=100, height=40)
-        run_button.grid(row=5, column=1, padx=20 , pady=(0, 30))
-        
-        stop_button = customtkinter.CTkButton(frame, text="Stop", command=None,font=customtkinter.CTkFont(size=15), width=100, height=40,fg_color="red",hover_color="grey")
-        stop_button.grid(row=6, column=1, padx=20 , pady=(0, 30))
+        # stop_button = customtkinter.CTkButton(frame, text="Stop", command=stop_event,font=customtkinter.CTkFont(size=15), width=100, height=40,fg_color="red",hover_color="grey")
+        # stop_button.grid(row=6, column=1, padx=20 , pady=(0, 30))
 
         def button_event():
             webbrowser.open("https://shamans1.github.io/mini-project/")
